@@ -244,11 +244,19 @@ export const AutocompleteDropdown = memo(
     }, [props.onClear])
 
     const debouncedEvent = useCallback(
-      debounce(text => {
-        if (typeof props.onChangeText === 'function') {
-          props.onChangeText(text)
-        }
-      }, props.debounce ?? 0),
+        (text)=>{
+            if(typeof props.debounce === 'number'){
+              debounce(() => {
+                if (typeof props.onChangeText === 'function') {
+                  props.onChangeText(text)
+                }
+              }, props.debounce ?? 0)
+            } else {
+              if (typeof props.onChangeText === 'function') {
+                props.onChangeText(text)
+              }
+            }
+        },
       [props.onChangeText]
     )
 
