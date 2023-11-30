@@ -85,13 +85,17 @@ export const AutocompleteDropdownContextProvider: FC<any> = ({ headerOffset = 0,
       positionTrackingInterval = setInterval(() => {
         requestAnimationFrame(() => {
           activeInputRef?.current &&
-            activeInputRef?.current?.measure((_x, _y, width, height, x, y) => {
+          activeInputRef?.current?.measure((_x, _y, width, height, x, y) => {
+            if (isNaN(_x) || isNaN(_y) || isNaN(width) || isNaN(height)) {
+              setContent(undefined);
+            } else {
               setInputMeasurements(prev =>
-                JSON.stringify(prev) === JSON.stringify({ x, y, width, height })
-                  ? prev
-                  : { x, y, width, height }
+                  JSON.stringify(prev) === JSON.stringify({ x, y, width, height })
+                      ? prev
+                      : { x, y, width, height }
               )
-            })
+            }
+          })
         })
       }, 16)
     } else {
