@@ -47,6 +47,7 @@ export const AutocompleteDropdown = memo(
       setContent,
       activeInputRef,
       direction = props.direction,
+      activeTextInputRef,
       setDirection
     } = useContext(AutocompleteDropdownContext)
 
@@ -333,7 +334,9 @@ export const AutocompleteDropdown = memo(
         if (activeInputRef) {
           activeInputRef.current = containerRef.current
         }
-
+        if (activeTextInputRef) {
+            activeTextInputRef.current = inputRef.current
+        }
         setContent(
           <Dropdown
             {...{
@@ -360,6 +363,7 @@ export const AutocompleteDropdown = memo(
       renderItem,
       ListEmptyComponent,
       activeInputRef,
+      activeTextInputRef,
       setContent
     ])
 

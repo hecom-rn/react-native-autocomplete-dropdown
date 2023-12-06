@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, useCallback, useRef, useState, useEffect, MutableRefObject } from 'react'
 import type { SetStateAction, Dispatch } from 'react'
-import { LayoutChangeEvent, View, ViewProps } from 'react-native'
+import {LayoutChangeEvent, TextInput, View, ViewProps} from 'react-native'
 import * as Animatable from 'react-native-animatable'
 import { fadeInDownShort, fadeInUpShort } from './helpers'
 
@@ -10,6 +10,7 @@ export interface IAutocompleteDropdownContext {
   direction?: 'up' | 'down'
   setDirection: Dispatch<SetStateAction<IAutocompleteDropdownContext['direction']>>
   activeInputRef?: MutableRefObject<View | null>
+  activeTextInputRef?: MutableRefObject<TextInput | null>
 }
 
 export const AutocompleteDropdownContext = React.createContext<IAutocompleteDropdownContext>({
@@ -17,7 +18,8 @@ export const AutocompleteDropdownContext = React.createContext<IAutocompleteDrop
   setContent: () => null,
   direction: undefined,
   setDirection: () => null,
-  activeInputRef: undefined
+  activeInputRef: undefined,
+  activeTextInputRef: undefined
 })
 
 export const AutocompleteDropdownContextProvider: FC<any> = ({ headerOffset = 0, children }) => {
@@ -33,6 +35,7 @@ export const AutocompleteDropdownContextProvider: FC<any> = ({ headerOffset = 0,
     { top: number; left: number; width?: number } | undefined
   >(undefined)
   const activeInputRef = useRef<View>(null)
+  const activeTextInputRef = useRef<TextInput>(null)
 
   useEffect(() => {
     if (!inputMeasurements?.height) {
@@ -113,7 +116,7 @@ export const AutocompleteDropdownContextProvider: FC<any> = ({ headerOffset = 0,
 
   return (
     <AutocompleteDropdownContext.Provider
-      value={{ content, setContent, activeInputRef, direction, setDirection }}>
+      value={{ content, setContent, activeInputRef, direction, setDirection, activeTextInputRef }}>
       {children}
       {!!content && show && (
         <View
