@@ -330,7 +330,7 @@ export const AutocompleteDropdown = memo(
         }, [dataSet, selectedItem])
 
         useEffect(() => {
-            if (isOpened && Array.isArray(dataSet)) {
+            if (isOpened && Array.isArray(dataSet) && !props.closeAutoCompleteWord) {
                 if (activeInputRef) {
                     activeInputRef.current = containerRef.current
                 }
@@ -346,7 +346,11 @@ export const AutocompleteDropdown = memo(
                             dataSet,
                             suggestionsListMaxHeight,
                             renderItem,
-                            ListEmptyComponent
+                            ListEmptyComponent,
+                            onClose: () => {
+                                close();
+                                props?.onCloseAutoCompleteWord?.();
+                            },
                         }}
                     />
                 )
@@ -355,6 +359,7 @@ export const AutocompleteDropdown = memo(
             }
         }, [
             isOpened,
+            props.closeAutoCompleteWord,
             dataSet,
             props,
             direction,
@@ -431,6 +436,8 @@ AutocompleteDropdown.propTypes = {
     onChangeText: PropTypes.func,
     onSelectItem: PropTypes.func,
     onOpenSuggestionsList: PropTypes.func,
+    closeAutoCompleteWord: PropTypes.bool,
+    onCloseAutoCompleteWord: PropTypes.func,
     onChevronPress: PropTypes.func,
     onClear: PropTypes.func,
     onSubmit: PropTypes.func,

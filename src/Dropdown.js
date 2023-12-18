@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react'
-import { StyleSheet, FlatList, View, Keyboard } from 'react-native'
+import {StyleSheet, FlatList, View, Keyboard, TouchableOpacity, Image} from 'react-native'
 
 export const Dropdown = memo(
     ({ dataSet, suggestionsListMaxHeight, renderItem, ListEmptyComponent, ...props }) => {
@@ -26,12 +26,35 @@ export const Dropdown = memo(
                     ItemSeparatorComponent={ItemSeparatorComponent}
                     {...props.flatListProps}
                 />
+                <TouchableOpacity
+                    style={styles.closeIcon}
+                    hitSlop={{ top: 3, bottom: 3, left: 3, right: 3 }}
+                    onPress={props.onClose}
+                    testID={'historyWordClose'}
+                >
+                    <Image
+                        source={require('../image/clear.png')}
+                        style={{ width: 20, height: 20 }}
+                    />
+                </TouchableOpacity>
             </View>
         )
     }
 )
 
 const styles = StyleSheet.create({
+    closeIcon: {
+        position: 'absolute',
+        top: -5,
+        right: -5,
+        width: 20,
+        height: 20,
+        backgroundColor: '#666666',
+        borderColor: '#FD6768',
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     container: {},
     listContainer: {
         backgroundColor: '#fff',
