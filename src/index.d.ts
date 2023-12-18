@@ -67,6 +67,8 @@ interface AutocompleteDropdownProps {
   EmptyResultComponent?: React.ReactElement
   emptyResultText?: string
   flatListProps?: FlatListProps<any>
+  closeAutoCompleteWord?: boolean,
+  onCloseAutoCompleteWord?: () => void,
 }
 
 export const AutocompleteDropdown: FC<AutocompleteDropdownProps>
