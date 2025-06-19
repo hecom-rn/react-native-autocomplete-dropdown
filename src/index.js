@@ -330,6 +330,10 @@ export const AutocompleteDropdown = memo(
         }, [dataSet, selectedItem])
 
         useEffect(() => {
+            const isFocused = inputRef.current?.isFocused?.()
+            if (!isFocused) {
+                return;
+            }
             if (isOpened && Array.isArray(dataSet) && !props.closeAutoCompleteWord) {
                 if (activeInputRef) {
                     activeInputRef.current = containerRef.current
@@ -369,7 +373,8 @@ export const AutocompleteDropdown = memo(
             ListEmptyComponent,
             activeInputRef,
             activeTextInputRef,
-            setContent
+            setContent,
+            inputRef.current?.isFocused?.()
         ])
 
         return (
