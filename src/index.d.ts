@@ -58,6 +58,7 @@ interface AutocompleteDropdownProps {
   rightButtonsContainerStyle?: StyleProp<ViewStyle>
   suggestionsListContainerStyle?: StyleProp<ViewStyle>
   suggestionsListTextStyle?: StyleProp<TextStyle>
+  triangleStyle?: StyleProp<ViewStyle>
   ChevronIconComponent?: React.ReactElement
   RightIconComponent?: React.ReactElement
   LeftComponent?: React.ReactElement

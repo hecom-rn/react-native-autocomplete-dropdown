@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react'
-import {StyleSheet, FlatList, View, Keyboard, TouchableOpacity, Image} from 'react-native'
+import {StyleSheet, FlatList, View, TouchableOpacity, Image} from 'react-native'
 
 export const Dropdown = memo(
     ({ dataSet, suggestionsListMaxHeight, renderItem, ListEmptyComponent, ...props }) => {
@@ -14,6 +14,8 @@ export const Dropdown = memo(
                     ...styles.listContainer,
                     ...props.suggestionsListContainerStyle
                 }}>
+                {/* small white triangle on top */}
+                <View style={[styles.triangle, props.triangleStyle]} />
                 <FlatList
                     keyboardDismissMode="on-drag"
                     keyboardShouldPersistTaps="handled"
@@ -54,6 +56,27 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    triangle: {
+        position: 'absolute',
+        top: -8, // lift above the container
+        left: 16, // default horizontal offset; can be overridden with triangleStyle
+        width: 0,
+        height: 0,
+        zIndex: 10,
+        borderLeftWidth: 6,
+        borderRightWidth: 6,
+        borderBottomWidth: 8,
+        borderLeftColor: 'transparent',
+        borderRightColor: 'transparent',
+        borderBottomColor: '#fff',
+        // optional shadow to match container (iOS only)
+        shadowColor: '#00000099',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.5,
+        // Android elevation shadow replication
+        elevation: 4
+    },
     container: {},
     listContainer: {
         backgroundColor: '#fff',
@@ -67,7 +90,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.3,
         shadowRadius: 15.46,
-
-        elevation: 20
+        elevation: 20,
+        position: 'relative'
     }
 })

@@ -452,6 +452,7 @@ AutocompleteDropdown.propTypes = {
     rightButtonsContainerStyle: PropTypes.object,
     suggestionsListContainerStyle: PropTypes.object,
     suggestionsListTextStyle: PropTypes.object,
+    triangleStyle: PropTypes.object,
     ChevronIconComponent: PropTypes.element,
     RightIconComponent: PropTypes.element,
     ClearIconComponent: PropTypes.element,
