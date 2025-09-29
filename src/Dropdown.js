@@ -1,21 +1,65 @@
-import React, { memo, useMemo } from 'react'
+import React, { memo, useMemo, useState, useCallback, useRef } from 'react'
 import {StyleSheet, FlatList, View, TouchableOpacity, Image} from 'react-native'
 
 export const Dropdown = memo(
-    ({ dataSet, suggestionsListMaxHeight, renderItem, ListEmptyComponent, ...props }) => {
+    ({ dataSet, suggestionsListMaxHeight, renderItem, ListEmptyComponent, triangleLeft, disableAutoPositionTriangle, inputCenterX, ...props }) => {
+        const [autoLeft, setAutoLeft] = useState(null)
+        const containerRef = useRef(null)
+
         const ItemSeparatorComponent = useMemo(() => {
             return () =>
                 props.ItemSeparatorComponent ?? <View style={{ height: 1, width: '100%', backgroundColor: '#ddd' }} />
         }, [props.ItemSeparatorComponent])
 
+        const onContainerLayout = useCallback(() => {
+            if (disableAutoPositionTriangle) return
+            containerRef.current?.measureInWindow((x, y, width) => {
+                if (!width) return
+                let newLeft
+                if (typeof inputCenterX === 'number') {
+                    newLeft = Math.round(inputCenterX - x - 6)
+                } else {
+                    newLeft = Math.round(width / 2 - 6)
+                }
+                if (newLeft < 0) newLeft = 0
+                if (newLeft > width - 12) newLeft = width - 12
+                setAutoLeft(newLeft)
+            })
+        }, [disableAutoPositionTriangle, inputCenterX])
+
+        const dynamicTriangleStyle = useMemo(() => {
+            if (typeof triangleLeft === 'number' && !isNaN(triangleLeft)) {
+                return { left: triangleLeft }
+            }
+            if (typeof autoLeft === 'number') {
+                return { left: autoLeft }
+            }
+            return null
+        }, [triangleLeft, autoLeft])
+
+        const directionTriangleStyle = useMemo(() => {
+            if (props.direction === 'up') {
+                return {
+                    top: undefined,
+                    bottom: -8,
+                    borderBottomWidth: 0,
+                    borderTopWidth: 8,
+                    borderTopColor: '#fff'
+                }
+            }
+            return {}
+        }, [props.direction])
+
         return (
             <View
+                ref={containerRef}
+                onLayout={onContainerLayout}
                 style={{
                     ...styles.listContainer,
                     ...props.suggestionsListContainerStyle
                 }}>
-                {/* small white triangle on top */}
-                <View style={[styles.triangle, props.triangleStyle]} />
+                {/* small white triangle (auto-centered; flips when direction='up') */}
+                <View style={[styles.triangle, directionTriangleStyle, dynamicTriangleStyle, props.triangleStyle]} />
                 <FlatList
                     keyboardDismissMode="on-drag"
                     keyboardShouldPersistTaps="handled"
@@ -58,8 +102,8 @@ const styles = StyleSheet.create({
     },
     triangle: {
         position: 'absolute',
-        top: -8, // lift above the container
-        left: 16, // default horizontal offset; can be overridden with triangleStyle
+        top: -8,
+        left: 16,
         width: 0,
         height: 0,
         zIndex: 10,
@@ -68,14 +112,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: 8,
         borderLeftColor: 'transparent',
         borderRightColor: 'transparent',
-        borderBottomColor: '#fff',
-        // optional shadow to match container (iOS only)
-        shadowColor: '#00000099',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.5,
-        // Android elevation shadow replication
-        elevation: 4
+        borderBottomColor: '#fff'
+        // removed shadow & elevation per request
     },
     container: {},
     listContainer: {
