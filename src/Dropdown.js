@@ -40,6 +40,7 @@ export const Dropdown = memo(
         const directionTriangleStyle = useMemo(() => {
             if (props.direction === 'up') {
                 return {
+                    ...styles.triangle,
                     top: undefined,
                     bottom: -8,
                     borderBottomWidth: 0,
@@ -47,7 +48,7 @@ export const Dropdown = memo(
                     borderTopColor: '#fff'
                 }
             }
-            return {}
+            return { ...styles.triangle }
         }, [props.direction])
 
         return (
@@ -59,7 +60,7 @@ export const Dropdown = memo(
                     ...props.suggestionsListContainerStyle
                 }}>
                 {/* small white triangle (auto-centered; flips when direction='up') */}
-                <View style={[styles.triangle, directionTriangleStyle, dynamicTriangleStyle, props.triangleStyle]} />
+                <View style={[directionTriangleStyle, dynamicTriangleStyle, props.triangleStyle]} />
                 <FlatList
                     keyboardDismissMode="on-drag"
                     keyboardShouldPersistTaps="handled"
